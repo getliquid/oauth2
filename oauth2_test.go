@@ -91,6 +91,26 @@ func TestURLUnsafeClientConfig(t *testing.T) {
 	}
 }
 
+func TestURLUnsafeClientConfigUnencoded(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if got, want := r.Header.Get("Authorization"), "Basic Q0xJRU5UX0lEPz86Q0xJRU5UX1NFQ1JFVD8/"; got != want {
+			t.Errorf("Authorization header = %q; want %q", got, want)
+		}
+
+		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
+		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+	}))
+	defer ts.Close()
+	conf := newConf(ts.URL)
+	conf.ClientID = "CLIENT_ID??"
+	conf.ClientSecret = "CLIENT_SECRET??"
+	conf.Endpoint.AuthStyle = AuthStyleInHeaderUnencoded
+	_, err := conf.Exchange(context.Background(), "exchange-code")
+	if err != nil {
+		t.Error(err)
+	}
+}
+
 func TestExchangeRequest(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.String() != "/token" {
