@@ -98,6 +98,11 @@ const (
 	// using HTTP Basic Authorization. This is an optional style
 	// described in the OAuth2 RFC 6749 section 2.3.1.
 	AuthStyleInHeader AuthStyle = 2
+
+	// AuthStyleInHeaderUnencoded uses HTTP Basic Authorization without the extra encoding
+	// required by the OAuth standard. This allows access to non-compliant implementations.
+	// Use with caution.
+	AuthStyleInHeaderUnencoded AuthStyle = 3
 )
 
 var (
