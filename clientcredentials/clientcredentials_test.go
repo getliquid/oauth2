@@ -12,6 +12,8 @@ import (
 	"net/http/httptest"
 	"net/url"
 	"testing"
+
+	"github.com/getliquid/oauth2/internal"
 )
 
 func newConf(serverURL string) *Config {

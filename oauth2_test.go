@@ -79,7 +79,11 @@ func TestURLUnsafeClientConfig(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+		w.Write(
+			[]byte(
+				"access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer",
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -98,7 +102,11 @@ func TestURLUnsafeClientConfigUnencoded(t *testing.T) {
 		}
 
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+		w.Write(
+			[]byte(
+				"access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer",
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -128,11 +136,17 @@ func TestExchangeRequest(t *testing.T) {
 		if err != nil {
 			t.Errorf("Failed reading request body: %s.", err)
 		}
-		if string(body) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
+		if string(
+			body,
+		) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
 			t.Errorf("Unexpected exchange payload; got %q", body)
 		}
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+		w.Write(
+			[]byte(
+				"access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer",
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -172,11 +186,17 @@ func TestExchangeRequest_CustomParam(t *testing.T) {
 		if err != nil {
 			t.Errorf("Failed reading request body: %s.", err)
 		}
-		if string(body) != "code=exchange-code&foo=bar&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
+		if string(
+			body,
+		) != "code=exchange-code&foo=bar&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
 			t.Errorf("Unexpected exchange payload, %v is found.", string(body))
 		}
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+		w.Write(
+			[]byte(
+				"access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer",
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -218,11 +238,17 @@ func TestExchangeRequest_JSONResponse(t *testing.T) {
 		if err != nil {
 			t.Errorf("Failed reading request body: %s.", err)
 		}
-		if string(body) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
+		if string(
+			body,
+		) != "code=exchange-code&grant_type=authorization_code&redirect_uri=REDIRECT_URL" {
 			t.Errorf("Unexpected exchange payload, %v is found.", string(body))
 		}
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"access_token": "90d64460d14870c08c81352a05dedd3465940a7c", "scope": "user", "token_type": "bearer", "expires_in": 86400}`))
+		w.Write(
+			[]byte(
+				`{"access_token": "90d64460d14870c08c81352a05dedd3465940a7c", "scope": "user", "token_type": "bearer", "expires_in": 86400}`,
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -315,7 +341,14 @@ func TestExchangeRequest_JSONResponse_Expiry(t *testing.T) {
 func testExchangeRequest_JSONResponse_expiry(t *testing.T, exp string, want, nullExpires bool) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(fmt.Sprintf(`{"access_token": "90d", "scope": "user", "token_type": "bearer", %s}`, exp)))
+		w.Write(
+			[]byte(
+				fmt.Sprintf(
+					`{"access_token": "90d", "scope": "user", "token_type": "bearer", %s}`,
+					exp,
+				),
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -422,7 +455,11 @@ func TestPasswordCredentialsTokenRequest(t *testing.T) {
 			t.Errorf("res.Body = %q; want %q", string(body), expected)
 		}
 		w.Header().Set("Content-Type", "application/x-www-form-urlencoded")
-		w.Write([]byte("access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer"))
+		w.Write(
+			[]byte(
+				"access_token=90d64460d14870c08c81352a05dedd3465940a7c&scope=user&token_type=bearer",
+			),
+		)
 	}))
 	defer ts.Close()
 	conf := newConf(ts.URL)
@@ -481,7 +518,9 @@ func TestFetchWithNoRefreshToken(t *testing.T) {
 			t.Errorf("Unexpected Content-Type header, %v is found.", headerContentType)
 		}
 		body, _ := ioutil.ReadAll(r.Body)
-		if string(body) != "client_id=CLIENT_ID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN" {
+		if string(
+			body,
+		) != "client_id=CLIENT_ID&grant_type=refresh_token&refresh_token=REFRESH_TOKEN" {
 			t.Errorf("Unexpected refresh token payload, %v is found.", string(body))
 		}
 	}))
@@ -556,7 +595,11 @@ func TestTokenRetrieveError200(t *testing.T) {
 func TestRefreshToken_RefreshTokenReplacement(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		w.Write([]byte(`{"access_token":"ACCESS_TOKEN",  "scope": "user", "token_type": "bearer", "refresh_token": "NEW_REFRESH_TOKEN"}`))
+		w.Write(
+			[]byte(
+				`{"access_token":"ACCESS_TOKEN",  "scope": "user", "token_type": "bearer", "refresh_token": "NEW_REFRESH_TOKEN"}`,
+			),
+		)
 		return
 	}))
 	defer ts.Close()
